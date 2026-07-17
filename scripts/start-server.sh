@@ -83,6 +83,29 @@ else
   echo "---Configuration found, continuing...---"
 fi
 
+echo "---Applying PalWorldSettings.ini overrides from environment---"
+source /opt/scripts/ini-utils.sh
+INI_FILE="${SERVER_DIR}/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini"
+
+# Only touch keys the user actually configured; anything left unset keeps
+# whatever the downloaded default PalWorldSettings.ini already has.
+[ -n "${RCON_ENABLED}" ] && set_ini_value "${INI_FILE}" "RCONEnabled" "${RCON_ENABLED}"
+[ -n "${RCON_PORT}" ] && set_ini_value "${INI_FILE}" "RCONPort" "${RCON_PORT}"
+[ -n "${PUBLIC_PORT}" ] && set_ini_value "${INI_FILE}" "PublicPort" "${PUBLIC_PORT}"
+[ -n "${SERVER_NAME}" ] && set_ini_value "${INI_FILE}" "ServerName" "${SERVER_NAME}" true
+[ -n "${SERVER_DESCRIPTION}" ] && set_ini_value "${INI_FILE}" "ServerDescription" "${SERVER_DESCRIPTION}" true
+[ -n "${SERVER_PASSWORD}" ] && set_ini_value "${INI_FILE}" "ServerPassword" "${SERVER_PASSWORD}" true true
+[ -n "${SRV_ADMIN_PWD}" ] && set_ini_value "${INI_FILE}" "AdminPassword" "${SRV_ADMIN_PWD}" true true
+[ -n "${ALLOW_CONNECT_PLATFORM}" ] && set_ini_value "${INI_FILE}" "AllowConnectPlatform" "${ALLOW_CONNECT_PLATFORM}"
+[ -n "${REST_API_ENABLED}" ] && set_ini_value "${INI_FILE}" "RESTAPIEnabled" "${REST_API_ENABLED}"
+[ -n "${REST_API_PORT}" ] && set_ini_value "${INI_FILE}" "RESTAPIPort" "${REST_API_PORT}"
+[ -n "${ENABLE_NON_LOGIN_PENALTY}" ] && set_ini_value "${INI_FILE}" "bEnableNonLoginPenalty" "${ENABLE_NON_LOGIN_PENALTY}"
+[ -n "${PAL_STOMACH_DECREASE_RATE}" ] && set_ini_value "${INI_FILE}" "PalStomachDecreaseRate" "${PAL_STOMACH_DECREASE_RATE}"
+[ -n "${PAL_EGG_DEFAULT_HATCHING_TIME}" ] && set_ini_value "${INI_FILE}" "PalEggDefaultHatchingTime" "${PAL_EGG_DEFAULT_HATCHING_TIME}"
+[ -n "${BASE_CAMP_WORKER_MAX_NUM}" ] && set_ini_value "${INI_FILE}" "BaseCampWorkerMaxNum" "${BASE_CAMP_WORKER_MAX_NUM}"
+[ -n "${BASE_CAMP_MAX_NUM_IN_GUILD}" ] && set_ini_value "${INI_FILE}" "BaseCampMaxNumInGuild" "${BASE_CAMP_MAX_NUM_IN_GUILD}"
+[ -n "${BUILD_OBJECT_DETERIORATION_DAMAGE_RATE}" ] && set_ini_value "${INI_FILE}" "BuildObjectDeteriorationDamageRate" "${BUILD_OBJECT_DETERIORATION_DAMAGE_RATE}"
+
 echo "---Checking if PublicIP is in place---"
 PUBLIC_IP="$(grep -o 'PublicIP="[^"]*"' ${SERVER_DIR}/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini | cut -d '"' -f2)"
 if [ -z "${PUBLIC_IP}" ]; then
